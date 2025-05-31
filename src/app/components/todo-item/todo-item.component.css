@@ -1,0 +1,112 @@
+.todo-item {
+  display: flex;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+.todo-item.completed {
+  background-color: #f9f9f9;
+}
+
+.todo-item.completed .todo-title {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.todo-item.sample-todo {
+  border-left: 3px solid #4285f4;
+}
+
+.sample-label {
+  font-size: 0.8em;
+  color: #666;
+  font-style: italic;
+  margin-left: 5px;
+}
+
+.view-mode, .edit-mode {
+  width: 100%;
+}
+
+.view-mode {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.todo-title {
+  margin-left: 10px;
+  word-break: break-word;
+}
+
+.actions, .edit-actions {
+  display: flex;
+  gap: 5px;
+}
+
+button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button.complete {
+  background-color: #28a745;
+  color: white;
+}
+
+button.edit {
+  background-color: #ffc107;
+  color: #333;
+}
+
+button.delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+button.save {
+  background-color: #28a745;
+  color: white;
+}
+
+button.cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.edit-mode input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.timestamp {
+  display: block;
+  font-size: 0.8em;
+  color: #666;
+  margin-top: 4px;
+}
+
+.created-time {
+  color: #4285f4;
+}
+
+.completed-time {
+  color: #28a745;
+}

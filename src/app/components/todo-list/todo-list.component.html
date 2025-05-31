@@ -1,0 +1,49 @@
+<div class="todo-container">
+  <h1>Todo Management App</h1>
+
+  <div class="add-todo">
+    <input
+      type="text"
+      [(ngModel)]="newTodoTitle"
+      placeholder="Add a new task..."
+      (keyup.enter)="addTodo()"
+    />
+    <button (click)="addTodo()">Add</button>
+  </div>
+
+  <div class="todo-section">
+    <h2>Tasks To Do</h2>
+    <div class="todo-list">
+      @if (incompleteTodos.length === 0) {
+        <p class="empty-message">No tasks to do. All caught up!</p>
+      } @else {
+        @for (todo of incompleteTodos; track todo.id) {
+          <app-todo-item
+            [todo]="todo"
+            (toggle)="toggleTodo($event)"
+            (delete)="deleteTodo($event)"
+            (update)="updateTodo($event.id, $event.title)"
+          ></app-todo-item>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="todo-section">
+    <h2>Completed Tasks</h2>
+    <div class="todo-list">
+      @if (completedTodos.length === 0) {
+        <p class="empty-message">No completed tasks yet.</p>
+      } @else {
+        @for (todo of completedTodos; track todo.id) {
+          <app-todo-item
+            [todo]="todo"
+            (toggle)="toggleTodo($event)"
+            (delete)="deleteTodo($event)"
+            (update)="updateTodo($event.id, $event.title)"
+          ></app-todo-item>
+        }
+      }
+    </div>
+  </div>
+</div>

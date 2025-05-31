@@ -1,0 +1,47 @@
+<div class="todo-item" [class.completed]="todo.completed" [class.sample-todo]="isSampleTodo">
+  @if (editing) {
+    <div class="edit-mode">
+      <input
+        #editInput
+        type="text"
+        [(ngModel)]="editTitle"
+        (keyup.enter)="saveEdit()"
+        (keyup.escape)="cancelEdit()"
+      />
+      <div class="edit-actions">
+        <button class="save" (click)="saveEdit()">Save</button>
+        <button class="cancel" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </div>
+  } @else {
+    <div class="view-mode">
+      <div class="todo-content">
+        <input
+          type="checkbox"
+          [checked]="todo.completed"
+          (change)="toggleTodo()"
+        />
+        <span class="todo-title" (dblclick)="startEdit()">
+          {{ todo.title }}
+          @if (isSampleTodo) {
+            <span class="sample-label">(Sample)</span>
+          }
+          <div class="timestamp">
+            @if (todo.completed) {
+              <span class="completed-time">Completed: {{ formatTime(todo.completedAt) }}</span>
+            } @else {
+              <span class="created-time">Created: {{ formatTime(todo.createdAt) }}</span>
+            }
+          </div>
+        </span>
+      </div>
+      <div class="actions">
+        <button class="complete" (click)="toggleTodo()">
+          {{ todo.completed ? 'Undo' : 'Complete' }}
+        </button>
+        <button class="edit" (click)="startEdit()" [disabled]="isSampleTodo">Edit</button>
+        <button class="delete" (click)="deleteTodo()" [disabled]="isSampleTodo">Delete</button>
+      </div>
+    </div>
+  }
+</div>
