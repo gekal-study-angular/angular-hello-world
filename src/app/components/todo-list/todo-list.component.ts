@@ -131,11 +131,17 @@ export class TodoListComponent implements OnInit {
   newTodoTitle = '';
 
   get incompleteTodos(): Todo[] {
-    return this.todos.filter(todo => !todo.completed);
+    // Filter incomplete todos and sort by creation time (ascending)
+    return this.todos
+      .filter(todo => !todo.completed)
+      .sort((a, b) => a.createdAt - b.createdAt);
   }
 
   get completedTodos(): Todo[] {
-    return this.todos.filter(todo => todo.completed);
+    // Filter completed todos and sort by completion time (ascending)
+    return this.todos
+      .filter(todo => todo.completed)
+      .sort((a, b) => (a.completedAt || 0) - (b.completedAt || 0));
   }
 
   constructor(private todoService: TodoService) {}

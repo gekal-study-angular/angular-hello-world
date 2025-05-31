@@ -36,6 +36,13 @@ import { Todo } from '../../models/todo.model';
               @if (isSampleTodo) {
                 <span class="sample-label">(Sample)</span>
               }
+              <div class="timestamp">
+                @if (todo.completed) {
+                  <span class="completed-time">Completed: {{ formatTime(todo.completedAt) }}</span>
+                } @else {
+                  <span class="created-time">Created: {{ formatTime(todo.createdAt) }}</span>
+                }
+              </div>
             </span>
           </div>
           <div class="actions">
@@ -147,6 +154,21 @@ import { Todo } from '../../models/todo.model';
       border-radius: 4px;
       font-size: 16px;
     }
+
+    .timestamp {
+      display: block;
+      font-size: 0.8em;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .created-time {
+      color: #4285f4;
+    }
+
+    .completed-time {
+      color: #28a745;
+    }
   `
 })
 export class TodoItemComponent {
@@ -198,5 +220,12 @@ export class TodoItemComponent {
 
   cancelEdit(): void {
     this.editing = false;
+  }
+
+  formatTime(timestamp?: number): string {
+    if (!timestamp) return 'N/A';
+
+    const date = new Date(timestamp);
+    return date.toLocaleString();
   }
 }

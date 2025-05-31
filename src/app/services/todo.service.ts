@@ -8,9 +8,9 @@ import { Todo } from '../models/todo.model';
 export class TodoService {
   // Sample todos with fixed IDs (1-1000 range reserved for samples)
   private sampleTodos: Todo[] = [
-    { id: 1, title: 'Learn Angular', completed: false },
-    { id: 2, title: 'Build a TODO App', completed: false },
-    { id: 3, title: 'Master RxJS', completed: false }
+    { id: 1, title: 'Learn Angular', completed: false, createdAt: Date.now() - 300000, completedAt: undefined },
+    { id: 2, title: 'Build a TODO App', completed: false, createdAt: Date.now() - 200000, completedAt: undefined },
+    { id: 3, title: 'Master RxJS', completed: false, createdAt: Date.now() - 100000, completedAt: undefined }
   ];
 
   // User todos will have IDs starting from 1001
@@ -34,7 +34,9 @@ export class TodoService {
       // Ensure user todo IDs start from 1001 to distinguish from sample todos
       id: 1001 + this.userTodos.length,
       title,
-      completed: false
+      completed: false,
+      createdAt: Date.now(),
+      completedAt: undefined
     };
     this.userTodos = [...this.userTodos, newTodo];
     this.todos = [...this.sampleTodos, ...this.userTodos];
@@ -44,14 +46,30 @@ export class TodoService {
   toggleTodo(id: number): void {
     if (id >= 1001) {
       // Toggle user todos
-      this.userTodos = this.userTodos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
+      this.userTodos = this.userTodos.map(todo => {
+        if (todo.id === id) {
+          const newCompleted = !todo.completed;
+          return {
+            ...todo,
+            completed: newCompleted,
+            completedAt: newCompleted ? Date.now() : undefined
+          };
+        }
+        return todo;
+      });
     } else {
       // Toggle sample todos
-      this.sampleTodos = this.sampleTodos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
+      this.sampleTodos = this.sampleTodos.map(todo => {
+        if (todo.id === id) {
+          const newCompleted = !todo.completed;
+          return {
+            ...todo,
+            completed: newCompleted,
+            completedAt: newCompleted ? Date.now() : undefined
+          };
+        }
+        return todo;
+      });
     }
     this.todos = [...this.sampleTodos, ...this.userTodos];
     this.todosSubject.next(this.todos);
