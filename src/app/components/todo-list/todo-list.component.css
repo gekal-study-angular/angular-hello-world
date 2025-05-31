@@ -49,6 +49,35 @@ button:hover {
   margin-bottom: 30px;
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h2 {
+  margin-bottom: 0;
+}
+
+.download-btn {
+  padding: 8px 12px;
+  background-color: #34a853;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.download-btn:hover {
+  background-color: #2d9249;
+}
+
+.download-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
 .todo-list {
   margin-top: 10px;
 }

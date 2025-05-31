@@ -30,7 +30,17 @@
   </div>
 
   <div class="todo-section">
-    <h2>Completed Tasks</h2>
+    <div class="section-header">
+      <h2>Completed Tasks</h2>
+      <button
+        class="download-btn"
+        (click)="downloadCompletedTodosAsCsv()"
+        [disabled]="completedTodos.length === 0"
+        title="Download completed tasks as CSV"
+      >
+        Download CSV
+      </button>
+    </div>
     <div class="todo-list">
       @if (completedTodos.length === 0) {
         <p class="empty-message">No completed tasks yet.</p>
