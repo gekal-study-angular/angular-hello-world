@@ -42,7 +42,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: pnpm run build -- --base-href=/angular-hello-world/ --configuration production --output-mode static
+        env:
+          GITHUB_PAGES: true
+        run: pnpm exec ng build --base-href=/angular-hello-world/ --configuration production --output-mode static
         # Note: Using static output mode for GitHub Pages compatibility
 
       - name: Upload artifact
