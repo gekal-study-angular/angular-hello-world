@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, of, tap } from 'rxjs';
-import { Todo } from '../models/todo.model';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, catchError, of, tap} from 'rxjs';
+import {Todo} from '../models/todo.model';
 
 /**
  * Service for managing todo items
@@ -14,11 +14,7 @@ export class TodoService {
   private readonly SAMPLE_ID_THRESHOLD = 1001;
 
   // Sample todos with fixed IDs (1-1000 range reserved for samples)
-  private sampleTodos: Todo[] = [
-    { id: 1, title: 'Learn Angular', completed: false, createdAt: Date.now() - 300000, completedAt: undefined },
-    { id: 2, title: 'Build a TODO App', completed: false, createdAt: Date.now() - 200000, completedAt: undefined },
-    { id: 3, title: 'Master RxJS', completed: false, createdAt: Date.now() - 100000, completedAt: undefined }
-  ];
+  private sampleTodos: Todo[] = [];
 
   // User todos will have IDs starting from 1001
   private userTodos: Todo[] = [];
@@ -166,7 +162,7 @@ export class TodoService {
       // Only update user todos (IDs >= 1001)
       if (id >= this.SAMPLE_ID_THRESHOLD) {
         this.userTodos = this.userTodos.map(todo =>
-          todo.id === id ? { ...todo, title: title.trim() } : todo
+          todo.id === id ? {...todo, title: title.trim()} : todo
         );
         this.updateState();
         this.saveTodos();
@@ -194,10 +190,41 @@ export class TodoService {
   }
 
   /**
+   * Check if localStorage is available
+   * @private
+   * @returns boolean indicating if localStorage is available
+   */
+  private isLocalStorageAvailable(): boolean {
+    try {
+      // Check if window is defined first (for SSR)
+      if (typeof window === 'undefined') {
+        return false;
+      }
+
+      // Check if localStorage is defined
+      if (typeof localStorage === 'undefined') {
+        return false;
+      }
+
+      // Test localStorage functionality
+      const testKey = '__test__';
+      localStorage.setItem(testKey, testKey);
+      localStorage.removeItem(testKey);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * Save user todos to localStorage
    * @private
    */
   private saveTodos(): void {
+    if (!this.isLocalStorageAvailable()) {
+      return;
+    }
+
     try {
       localStorage.setItem('userTodos', JSON.stringify(this.userTodos));
     } catch (error) {
@@ -210,6 +237,10 @@ export class TodoService {
    * @private
    */
   private loadTodos(): void {
+    if (!this.isLocalStorageAvailable()) {
+      return;
+    }
+
     try {
       const savedTodos = localStorage.getItem('userTodos');
       if (savedTodos) {
