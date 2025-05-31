@@ -42,14 +42,19 @@ export class TodoService {
   }
 
   toggleTodo(id: number): void {
-    // Only modify user todos (IDs >= 1001)
     if (id >= 1001) {
+      // Toggle user todos
       this.userTodos = this.userTodos.map(todo =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       );
-      this.todos = [...this.sampleTodos, ...this.userTodos];
-      this.todosSubject.next(this.todos);
+    } else {
+      // Toggle sample todos
+      this.sampleTodos = this.sampleTodos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
     }
+    this.todos = [...this.sampleTodos, ...this.userTodos];
+    this.todosSubject.next(this.todos);
   }
 
   deleteTodo(id: number): void {

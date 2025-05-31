@@ -11,7 +11,7 @@ import { TodoItemComponent } from '../todo-item/todo-item.component';
   imports: [CommonModule, FormsModule, TodoItemComponent],
   template: `
     <div class="todo-container">
-      <h1>Todo App</h1>
+      <h1>Todo Management App</h1>
 
       <div class="add-todo">
         <input
@@ -23,25 +23,46 @@ import { TodoItemComponent } from '../todo-item/todo-item.component';
         <button (click)="addTodo()">Add</button>
       </div>
 
-      <div class="todo-list">
-        @if (todos.length === 0) {
-          <p class="empty-message">No tasks yet. Add one above!</p>
-        } @else {
-          @for (todo of todos; track todo.id) {
-            <app-todo-item
-              [todo]="todo"
-              (toggle)="toggleTodo($event)"
-              (delete)="deleteTodo($event)"
-              (update)="updateTodo($event.id, $event.title)"
-            ></app-todo-item>
+      <div class="todo-section">
+        <h2>Tasks To Do</h2>
+        <div class="todo-list">
+          @if (incompleteTodos.length === 0) {
+            <p class="empty-message">No tasks to do. All caught up!</p>
+          } @else {
+            @for (todo of incompleteTodos; track todo.id) {
+              <app-todo-item
+                [todo]="todo"
+                (toggle)="toggleTodo($event)"
+                (delete)="deleteTodo($event)"
+                (update)="updateTodo($event.id, $event.title)"
+              ></app-todo-item>
+            }
           }
-        }
+        </div>
+      </div>
+
+      <div class="todo-section">
+        <h2>Completed Tasks</h2>
+        <div class="todo-list">
+          @if (completedTodos.length === 0) {
+            <p class="empty-message">No completed tasks yet.</p>
+          } @else {
+            @for (todo of completedTodos; track todo.id) {
+              <app-todo-item
+                [todo]="todo"
+                (toggle)="toggleTodo($event)"
+                (delete)="deleteTodo($event)"
+                (update)="updateTodo($event.id, $event.title)"
+              ></app-todo-item>
+            }
+          }
+        </div>
       </div>
     </div>
   `,
   styles: `
     .todo-container {
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto;
       padding: 20px;
     }
@@ -49,11 +70,20 @@ import { TodoItemComponent } from '../todo-item/todo-item.component';
     h1 {
       text-align: center;
       color: #333;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #4285f4;
+      border-bottom: 2px solid #4285f4;
+      padding-bottom: 5px;
+      margin-top: 30px;
+      margin-bottom: 15px;
     }
 
     .add-todo {
       display: flex;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     input {
@@ -78,20 +108,35 @@ import { TodoItemComponent } from '../todo-item/todo-item.component';
       background-color: #3367d6;
     }
 
+    .todo-section {
+      margin-bottom: 30px;
+    }
+
     .todo-list {
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     .empty-message {
       text-align: center;
       color: #666;
       font-style: italic;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
     }
   `
 })
 export class TodoListComponent implements OnInit {
   todos: Todo[] = [];
   newTodoTitle = '';
+
+  get incompleteTodos(): Todo[] {
+    return this.todos.filter(todo => !todo.completed);
+  }
+
+  get completedTodos(): Todo[] {
+    return this.todos.filter(todo => todo.completed);
+  }
 
   constructor(private todoService: TodoService) {}
 

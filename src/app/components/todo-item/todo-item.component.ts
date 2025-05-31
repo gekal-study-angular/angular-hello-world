@@ -30,7 +30,6 @@ import { Todo } from '../../models/todo.model';
               type="checkbox"
               [checked]="todo.completed"
               (change)="toggleTodo()"
-              [disabled]="isSampleTodo"
             />
             <span class="todo-title" (dblclick)="startEdit()">
               {{ todo.title }}
@@ -40,6 +39,9 @@ import { Todo } from '../../models/todo.model';
             </span>
           </div>
           <div class="actions">
+            <button class="complete" (click)="toggleTodo()">
+              {{ todo.completed ? 'Undo' : 'Complete' }}
+            </button>
             <button class="edit" (click)="startEdit()" [disabled]="isSampleTodo">Edit</button>
             <button class="delete" (click)="deleteTodo()" [disabled]="isSampleTodo">Delete</button>
           </div>
@@ -112,6 +114,11 @@ import { Todo } from '../../models/todo.model';
       font-size: 14px;
     }
 
+    button.complete {
+      background-color: #28a745;
+      color: white;
+    }
+
     button.edit {
       background-color: #ffc107;
       color: #333;
@@ -157,9 +164,7 @@ export class TodoItemComponent {
   }
 
   toggleTodo(): void {
-    if (!this.isSampleTodo) {
-      this.toggle.emit(this.todo.id);
-    }
+    this.toggle.emit(this.todo.id);
   }
 
   deleteTodo(): void {
