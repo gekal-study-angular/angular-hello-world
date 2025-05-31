@@ -57,3 +57,29 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## GitHub Pages Deployment
+
+This project is configured to automatically deploy to GitHub Pages using GitHub Actions. When you push changes to the `main` branch, the application will be built and deployed to GitHub Pages.
+
+### Required GitHub Repository Settings
+
+To enable GitHub Pages deployment:
+
+1. Go to your GitHub repository settings
+2. Navigate to "Pages" in the left sidebar
+3. Under "Build and deployment", select "GitHub Actions" as the source
+4. The first workflow run will create the GitHub Pages site
+
+After the workflow runs successfully, your application will be available at `https://[your-username].github.io/angular-hello-world/`
+
+### Manual Deployment
+
+If you want to build and deploy manually:
+
+```bash
+# Build for production with the correct base-href
+ng build --base-href=/angular-hello-world/ --configuration production --output-mode static
+```
+
+The `--base-href` parameter should match your repository name.
