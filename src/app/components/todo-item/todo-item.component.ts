@@ -8,7 +8,7 @@ import { Todo } from '../../models/todo.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="todo-item" [class.completed]="todo.completed">
+    <div class="todo-item" [class.completed]="todo.completed" [class.sample-todo]="isSampleTodo">
       @if (editing) {
         <div class="edit-mode">
           <input
@@ -29,13 +29,19 @@ import { Todo } from '../../models/todo.model';
             <input
               type="checkbox"
               [checked]="todo.completed"
-              (change)="toggle.emit(todo.id)"
+              (change)="toggleTodo()"
+              [disabled]="isSampleTodo"
             />
-            <span class="todo-title" (dblclick)="startEdit()">{{ todo.title }}</span>
+            <span class="todo-title" (dblclick)="startEdit()">
+              {{ todo.title }}
+              @if (isSampleTodo) {
+                <span class="sample-label">(Sample)</span>
+              }
+            </span>
           </div>
           <div class="actions">
-            <button class="edit" (click)="startEdit()">Edit</button>
-            <button class="delete" (click)="delete.emit(todo.id)">Delete</button>
+            <button class="edit" (click)="startEdit()" [disabled]="isSampleTodo">Edit</button>
+            <button class="delete" (click)="deleteTodo()" [disabled]="isSampleTodo">Delete</button>
           </div>
         </div>
       }
@@ -59,6 +65,17 @@ import { Todo } from '../../models/todo.model';
     .todo-item.completed .todo-title {
       text-decoration: line-through;
       color: #888;
+    }
+
+    .todo-item.sample-todo {
+      border-left: 3px solid #4285f4;
+    }
+
+    .sample-label {
+      font-size: 0.8em;
+      color: #666;
+      font-style: italic;
+      margin-left: 5px;
     }
 
     .view-mode, .edit-mode {
@@ -134,7 +151,28 @@ export class TodoItemComponent {
   editing = false;
   editTitle = '';
 
+  // Sample todos have IDs < 1001
+  get isSampleTodo(): boolean {
+    return this.todo.id < 1001;
+  }
+
+  toggleTodo(): void {
+    if (!this.isSampleTodo) {
+      this.toggle.emit(this.todo.id);
+    }
+  }
+
+  deleteTodo(): void {
+    if (!this.isSampleTodo) {
+      this.delete.emit(this.todo.id);
+    }
+  }
+
   startEdit(): void {
+    if (this.isSampleTodo) {
+      return; // Don't allow editing sample todos
+    }
+
     this.editing = true;
     this.editTitle = this.todo.title;
     // Focus the input element after rendering
@@ -147,7 +185,7 @@ export class TodoItemComponent {
   }
 
   saveEdit(): void {
-    if (this.editTitle.trim() && this.editTitle !== this.todo.title) {
+    if (!this.isSampleTodo && this.editTitle.trim() && this.editTitle !== this.todo.title) {
       this.update.emit({id: this.todo.id, title: this.editTitle.trim()});
     }
     this.editing = false;
